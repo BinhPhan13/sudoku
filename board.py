@@ -34,12 +34,15 @@ class Board:
     def config(self, setup:str):
         assert isinstance(setup, str)
         if not setup.isdigit():
-            print("Setup should only contains 0-9")
-            return
+            raise ValueError("Setup should only contains 0-9")
 
+        self.clear()
         for i in range(len(self._data)):
             v = int(setup[i])
             self[i] = v
+
+    def clear(self):
+        for i in range(81): self[i] = 0
 
     def export(self) -> str:
         return ''.join(str(v) for v in self._data)
@@ -64,10 +67,6 @@ class Board:
             if r in [2,5]: s += BR
 
         return s
-
-    def __copy__(self):
-        setup = self.export()
-        return Board(setup)
 
 SETUP = ''.join([
     '000960200',

@@ -1,6 +1,5 @@
 from board import Board
 import random
-from copy import copy
 
 class Solver:
     def __init__(self,
@@ -20,7 +19,8 @@ class Solver:
             return
 
         if not self._holes:
-            self._solutions.append(copy(self._board))
+            solution = self._board.export()
+            self._solutions.append(solution)
             return
 
         self._n += 1
@@ -47,7 +47,7 @@ class Solver:
 
     @property
     def solutions(self):
-        return [copy(b) for b in self._solutions]
+        return self._solutions.copy()
 
     @property
     def num_trials(self):

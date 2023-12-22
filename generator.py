@@ -1,7 +1,6 @@
 from board import Board
 from solver import Solver
 import random
-from copy import copy
 
 class Generator:
     def __init__(self,
@@ -27,16 +26,18 @@ class Generator:
             print(f"Trial no.{t+1}")
             self._fill()
             k = self._drop()
-            if k == 0: return self._board
+            if k == 0: return self._board.export()
             if k < min_k:
-                best, min_k = copy(self._board), k
+                best, min_k = self._board.export(), k
 
         return best
 
     def _fill(self):
         s = Solver(self._board, max_solutions=1)
         s.solve()
-        self._board = s.solutions[0]
+
+        solution = s.solutions[0]
+        self._board.config(solution)
 
     def _drop(self):
         b = self._board
@@ -70,9 +71,10 @@ if __name__ == '__main__':
     g = Generator(58)
     with open('test.txt', 'w') as f:
         for i in range(10):
-            b = g.generate()
+            setup = g.generate()
+            b = Board(setup)
             if len(b.holes()) < 58: continue
-            print(b.export(), file=f, flush=True)
+            print(setup, file=f, flush=True)
 
     with open('test.txt') as f:
         for line in f:
