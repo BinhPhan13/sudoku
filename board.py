@@ -1,8 +1,7 @@
 class Board:
     def __init__(self, setup=None):
         self._data = [0] * 81
-        if setup:
-            for i in range(81): self[i] = setup[i]
+        if setup: self.config(setup)
 
     def possible_values(self, index):
         assert 0 <= index < 81
@@ -32,6 +31,19 @@ class Board:
         else:
             return [i for i in range(81) if self[i] == 0]
 
+    def config(self, setup:str):
+        assert isinstance(setup, str)
+        if not setup.isdigit():
+            print("Setup should only contains 0-9")
+            return
+
+        for i in range(len(self._data)):
+            v = int(setup[i])
+            self[i] = v
+
+    def export(self) -> str:
+        return ''.join(str(v) for v in self._data)
+
     def __getitem__(self, i):
         return self._data[i]
 
@@ -54,21 +66,20 @@ class Board:
         return s
 
     def __copy__(self):
-        return Board([x for x in self._data])
+        setup = self.export()
+        return Board(setup)
 
-SETUP = [
-    0, 0, 0,  9, 6, 0,  2, 0, 0,
-    0, 0, 0,  0, 0, 0,  0, 6, 0,
-    0, 8, 0,  1, 0, 0,  0, 9, 0,
-
-    0, 0, 8,  0, 0, 0,  0, 3, 2,
-    6, 1, 9,  0, 0, 0,  0, 0, 0,
-    0, 0, 2,  0, 0, 0,  0, 0, 4,
-
-    0, 0, 0,  0, 0, 3,  5, 0, 7,
-    1, 0, 0,  0, 0, 8,  0, 0, 0,
-    0, 5, 0,  0, 2, 0,  0, 0, 0,
-]
+SETUP = ''.join([
+    '000960200',
+    '000000060',
+    '080100090',
+    '008000032',
+    '619000000',
+    '002000004',
+    '000003507',
+    '100008000',
+    '050020000',
+])
 if __name__ == '__main__':
     b = Board(SETUP)
     print(b)

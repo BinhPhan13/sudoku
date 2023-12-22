@@ -67,11 +67,18 @@ class Generator:
         return k
 
 if __name__ == '__main__':
-    g = Generator(59)
-    b = g.generate()
-    print(f'{len(b.holes())} holes')
-    print(b)
+    g = Generator(58)
+    with open('test.txt', 'w') as f:
+        for i in range(10):
+            b = g.generate()
+            if len(b.holes()) < 58: continue
+            print(b.export(), file=f, flush=True)
 
-    s = Solver(b, max_solutions=2)
-    s.solve()
-    assert len(s.solutions) == 1
+    with open('test.txt') as f:
+        for line in f:
+            setup = line.strip()
+            b = Board(setup)
+
+            s = Solver(b)
+            s.solve()
+            assert len(s.solutions) == 1
