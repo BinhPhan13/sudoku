@@ -56,6 +56,10 @@ class Board:
         if v > 0: assert v in self.possible_values(i)
         self._data[i] = v
 
+        try:
+            self.view.update(i,v)
+        except AttributeError: pass
+
     def __repr__(self):
         WS, BR = ' ', '\n'
         s = ''
