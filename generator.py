@@ -68,19 +68,26 @@ class Generator:
         return k
 
 if __name__ == '__main__':
-    g = Generator(58)
-    with open('test.txt', 'w') as f:
-        for i in range(10):
-            setup = g.generate()
-            b = Board(setup)
-            if len(b.holes()) < 58: continue
-            print(setup, file=f, flush=True)
+    import json
+    from sys import argv
 
-    with open('test.txt') as f:
-        for line in f:
-            setup = line.strip()
-            b = Board(setup)
+    try:
+        with open('setups.json') as f:
+            setups = json.load(f)
+    except FileNotFoundError:
+        setups = {}
 
-            s = Solver(b)
-            s.solve()
-            assert len(s.solutions) == 1
+    num_holes = int(argv[1])
+    g = Generator(num_holes)
+    x = setups.setdefault(str(num_holes), [])
+
+    for i in range(10):
+        setup = g.generate()
+        b = Board(setup)
+        if len(b.holes()) < num_holes: continue
+
+        x.append(setup)
+
+    del x[:-20]
+    with open('setups.json', 'w') as f:
+        json.dump(setups, f, indent=2, sort_keys=True)

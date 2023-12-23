@@ -36,13 +36,23 @@ class View:
         curses.endwin()
 
 if __name__ == '__main__':
+    import json
+    import random
+    from sys import argv
+
+    with open('setups.json') as f:
+        setups = json.load(f)
+
+    num_holes = int(argv[1])
+    setup = random.choice(setups[str(num_holes)])
+
     v = View()
     b = Board()
     b.view = v
 
     try:
         v.start()
-        b.config(SETUP)
+        b.config(setup)
 
         while True:
             key = v.scr.getch()
@@ -56,7 +66,7 @@ if __name__ == '__main__':
                 b.config(solution)
 
             elif ord('r') == key:
-                b.config(SETUP)
+                b.config(setup)
 
     except Exception as e:
         print(f'{e!r}')
