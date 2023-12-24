@@ -21,7 +21,8 @@ class View:
 
         color = curses.A_COLOR if value == 0 else curses.A_BOLD
 
-        self.scr.addch(r, c, str(value), color)
+        s = str(value) if value > 0 else '.'
+        self.scr.addch(r, c, s, color)
         self.scr.refresh()
 
     def start(self):
